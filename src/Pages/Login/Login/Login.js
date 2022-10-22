@@ -1,7 +1,8 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 
@@ -9,9 +10,12 @@ import { AuthContext } from '../../../contexts/AuthProvider/AuthProvider';
 
 const Login = () => {
 
-    const { signIn } = useContext(AuthContext);
-
+    const [error, setError] = useState('');
+    const { signIn, setLoading } = useContext(AuthContext);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    const from = location.state?.from?.pathname || '/';
 
 
     const handleSubmit = event => {
@@ -25,9 +29,22 @@ const Login = () => {
                 const user = result.user;
                 console.log(user);
                 form.reset()
-                navigate('/')
+                setError('');
+                if (user.emailVerified) {
+                    navigate(from, { replace: true, })
+                }
+                else {
+                    toast.error('Your Email is not verified. Please verified email')
+                }
             })
-            .catch(error => console.error(error))
+            .catch(error => {
+                console.error(error)
+                setError(error.message)
+            })
+
+            .finally(() => {
+                setLoading(false)
+            })
     }
 
     return (
@@ -46,8 +63,8 @@ const Login = () => {
             <Button variant="primary" type="submit">
                 Login
             </Button>
-            <Form.Text className="text-danger">
-
+            <Form.Text className="text-danger m-4">
+                {error}
             </Form.Text>
         </Form>
     );

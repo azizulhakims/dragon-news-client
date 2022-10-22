@@ -6,7 +6,7 @@ import { FaEye, FaRegBookmark, FaShareAlt, FaStar, IconName } from "react-icons/
 
 const NewsSummeryCard = ({ news }) => {
     const { _id, title, total_view, author, details, image_url, rating } = news;
-    console.log(news)
+    // console.log(news)
     return (
         <Card className="mb-5">
             <Card.Header className='d-flex justify-content-between align-item-center'>
@@ -18,8 +18,8 @@ const NewsSummeryCard = ({ news }) => {
                         style={{ height: '60px' }}
                     ></Image>
                     <div>
-                        <p className='mb-0'>{author?.name}</p>
-                        <p>{author?.published_date}</p>
+                        <> className='mb-0'>{author?.name}</>
+                        <>{author?.published_date}</>
                     </div>
                 </div>
                 <div>
@@ -35,9 +35,9 @@ const NewsSummeryCard = ({ news }) => {
                 </Card.Text>
                 {
                     details.length > 250 ?
-                        <p>{details.slice(0, 250) + '...'} <Link to={`/news/${_id}`}>Read More</Link></p>
+                        <>{details.slice(0, 250) + '...'} <Link to={`/news/${_id}`}>Read More</Link></>
                         :
-                        <p>{details}</p>
+                        <>{details}</>
                 }
             </Card.Body>
             <Card.Footer className="d-flex justify-content-between">
